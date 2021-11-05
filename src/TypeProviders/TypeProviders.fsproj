@@ -7,6 +7,7 @@
 
     <ItemGroup>
         <Compile Include="Json.fs" />
+        <Content Include="sample.json" />
     </ItemGroup>
 
     <ItemGroup>

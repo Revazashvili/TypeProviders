@@ -1,4 +1,5 @@
-﻿    open FSharp.Data
+﻿    open System.IO
+    open FSharp.Data
     open Microsoft.FSharp.Core
 
     module Todos =
@@ -33,6 +34,20 @@
             Users.Load(UserUrl)
             |> Seq.take 1
             |> Seq.iter (fun user -> printfn  $"{user}")
+            
+            
+    module FromFile =
+        [<Literal>]
+        let private filePath = "C:\Projects\NetCore\TypeProviders\src\TypeProviders\sample.json"
+        type private FileData = JsonProvider<filePath>
+        
+        let Run() =
+            let feeds = filePath |> FileData.Load
+            feeds.Feeds
+            |> Seq.groupBy (fun feed -> feed.Isdeleted)
+            |> Seq.iter (fun (key,value) -> printfn $"Deleted: {key}; Number: {Seq.length value}")
+            
+        
     
     [<EntryPoint>]
     let main args =
@@ -45,5 +60,6 @@
             | "users" -> Users.Run()
             | "todos" -> Todos.Run()
             | "photos" -> Photos.Run()
+            | "file" -> FromFile.Run()
             | _ -> printfn "There is no action associated with this argument"
             0
